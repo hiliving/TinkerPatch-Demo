@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    signingConfigs {
+        release {
+            try {
+                storeFile file("./keystore/keys.jks")
+                storePassword "123456"
+                keyAlias "tinker"
+                keyPassword "123456"
+            } catch (ex) {
+                throw new InvalidUserDataException(ex.toString())
+            }
+        }
+
+        debug {
+            // storeFile file("./keystore/debug.keystore")
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.practice.dev.tinkerpatch_demo"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0.0"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    //注意这里，在自己的项目里要确定这里应用了签名的配置，即signingConfigs.release，上面已经定义好，这里调用就行
+    buildTypes {
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.+'
+    testCompile 'junit:junit:4.12'
+
+    compile "com.android.support:multidex:1.0.1"
+    //若使用annotation需要单独引用,对于tinker的其他库都无需再引用
+    provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
+    compile("com.tinkerpatch.sdk:tinkerpatch-android-sdk:${TINKERPATCH_VERSION}") { changing = true }
+}
+apply from: 'tinkerpatch.gradle'
