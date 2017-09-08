@@ -1,3 +1,5 @@
+[![Travis branch](https://img.shields.io/badge/version-1.0.1-yellowgreen.svg)](http://blog.csdn.net/huang_yong_)
+[![](https://img.shields.io/badge/作者-HuangYong-blue.svg)](http://blog.csdn.net/huang_yong_)
 # TinkerPatch-Demo
 
 ### tinker热修复平台tinkerPatch应用demo
